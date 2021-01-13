@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, BackHandler } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -13,9 +13,9 @@ import ServerAvatar from './ServerAvatar';
 import { getShowLoginButton } from '../../selectors/login';
 
 class WorkspaceView extends React.Component {
-	static navigationOptions = () => ({
-		title: I18n.t('Your_workspace')
-	})
+	static navigationOptions = {
+		headerShown: false
+	};
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -61,6 +61,19 @@ class WorkspaceView extends React.Component {
 		return <Text style={[styles.registrationText, { color: themes[theme].auxiliaryText }]}>{registrationText}</Text>;
 	}
 
+	componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+	handleBackButton() {
+		BackHandler.exitApp();
+        return true;
+    }
+
 	render() {
 		const {
 			theme, Site_Name, Site_Url, Assets_favicon_512, server, showLoginButton
@@ -72,7 +85,6 @@ class WorkspaceView extends React.Component {
 					<View style={styles.alignItemsCenter}>
 						<ServerAvatar theme={theme} url={server} image={Assets_favicon_512?.url ?? Assets_favicon_512?.defaultUrl} />
 						<Text style={[styles.serverName, { color: themes[theme].titleText }]}>{Site_Name}</Text>
-						<Text style={[styles.serverUrl, { color: themes[theme].auxiliaryText }]}>{Site_Url}</Text>
 					</View>
 					{showLoginButton
 						? (

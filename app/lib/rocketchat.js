@@ -1275,7 +1275,8 @@ const RocketChat = {
 
 		// TODO: remove this after other oauth providers are implemented. e.g. Drupal, github_enterprise
 		const availableOAuth = ['facebook', 'github', 'gitlab', 'google', 'linkedin', 'meteor-developer', 'twitter', 'wordpress'];
-		return availableOAuth.includes(authName) ? 'oauth' : 'not_supported';
+		// return availableOAuth.includes(authName) ? 'oauth' : 'not_supported';
+		return 'not_supported';
 	},
 	getUsernameSuggestion() {
 		// RC 0.65.0

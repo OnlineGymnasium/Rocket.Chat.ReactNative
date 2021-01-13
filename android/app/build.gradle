@@ -140,11 +140,12 @@ android {
     }
 
     defaultConfig {
-        applicationId APPLICATION_ID
+        applicationId "messenger.schooleducation.online"
+//        applicationId "chat.rocket.reactnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode VERSIONCODE as Integer
-        versionName "4.13.1"
+        versionCode 1
+        versionName "1.0"
         vectorDrawables.useSupportLibrary = true
         if (!isFoss) {
             manifestPlaceholders = [BugsnagAPIKey: BugsnagAPIKey as String]
@@ -155,12 +156,10 @@ android {
 
     signingConfigs {
         release {
-            if (project.hasProperty('KEYSTORE')) {
-                storeFile file(KEYSTORE)
-                storePassword KEYSTORE_PASSWORD
-                keyAlias KEY_ALIAS
-                keyPassword KEY_PASSWORD
-            }
+            storeFile file("E:\\client\\Andrey\\1.jks")
+            storePassword "123123"
+            keyAlias "rc"
+            keyPassword "123123"
         }
     }
     splits {

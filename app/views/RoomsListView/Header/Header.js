@@ -65,7 +65,8 @@ const Header = React.memo(({
 	} else if (!connected) {
 		subtitle = I18n.t('Waiting_for_network');
 	} else {
-		subtitle = server?.replace(/(^\w+:|^)\/\//, '');
+		subtitle = '';
+		// subtitle = server?.replace(/(^\w+:|^)\/\//, '');
 	}
 	return (
 		<View style={styles.container}>
@@ -75,12 +76,12 @@ const Header = React.memo(({
 			>
 				<View style={styles.button}>
 					<Text style={[styles.title, isFetching && styles.serverSmall, titleColorStyle, { fontSize: titleFontSize }]} numberOfLines={1}>{serverName}</Text>
-					<CustomIcon
+					{/* <CustomIcon
 						name='chevron-down'
 						color={themes[theme].headerTintColor}
 						style={[showServerDropdown && styles.upsideDown]}
 						size={18}
-					/>
+					/> */}
 				</View>
 				{subtitle ? <Text style={[styles.subtitle, { color: themes[theme].auxiliaryText, fontSize: subTitleFontSize }]} numberOfLines={1}>{subtitle}</Text> : null}
 			</TouchableOpacity>

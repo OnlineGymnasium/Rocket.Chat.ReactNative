@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-	Text, Keyboard, StyleSheet, View, BackHandler
+	Text, Keyboard, StyleSheet, View, BackHandler, Image
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Base64 } from 'js-base64';
@@ -57,13 +57,20 @@ const styles = StyleSheet.create({
 	},
 	connectButton: {
 		marginBottom: 0
-	}
+	},
+	serverIcon: {
+		alignSelf: 'center',
+		// maxHeight: verticalScale(150),
+		resizeMode: 'contain',
+		width: 70,
+		height: 70
+	},
 });
 
 class NewServerView extends React.Component {
-	static navigationOptions = () => ({
-		title: I18n.t('Workspaces')
-	})
+	static navigationOptions = {
+		headerShown: false
+	};
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -78,16 +85,18 @@ class NewServerView extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.setHeader();
+		// this.setHeader();
 
 		this.state = {
-			text: '',
+			text: 'chat.schooleducation.online',
 			connectingOpen: false,
 			certificate: null,
 			serversHistory: []
 		};
 		EventEmitter.addEventListener('NewServer', this.handleNewServerEvent);
 		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+
+		this.submit();
 	}
 
 	componentDidMount() {
@@ -97,7 +106,7 @@ class NewServerView extends React.Component {
 	componentDidUpdate(prevProps) {
 		const { adding } = this.props;
 		if (prevProps.adding !== adding) {
-			this.setHeader();
+			// this.setHeader();
 		}
 	}
 
@@ -173,29 +182,12 @@ class NewServerView extends React.Component {
 		this.setState({ text: serverHistory?.url }, () => this.submit({ fromServerHistory: true, username: serverHistory?.username }));
 	}
 
-	submit = async({ fromServerHistory = false, username }) => {
+	submit = () => {
 		logEvent(events.NEWSERVER_CONNECT_TO_WORKSPACE);
 		const { text, certificate } = this.state;
 		const { connectServer } = this.props;
-
-		this.setState({ connectingOpen: false });
-
-		if (text) {
-			Keyboard.dismiss();
-			const server = this.completeUrl(text);
-
-			// Save info - SSL Pinning
-			await UserPreferences.setStringAsync(`${ RocketChat.CERTIFICATE_KEY }-${ server }`, certificate);
-
-			// Save info - HTTP Basic Authentication
-			await this.basicAuth(server, text);
-
-			if (fromServerHistory) {
-				connectServer(server, username, true);
-			} else {
-				connectServer(server);
-			}
-		}
+		const server = this.completeUrl(text);
+		connectServer(server);
 	}
 
 	connectOpen = () => {
@@ -314,48 +306,11 @@ class NewServerView extends React.Component {
 		const {
 			text, connectingOpen, serversHistory
 		} = this.state;
+
 		return (
-			<FormContainer
-				theme={theme}
-				testID='new-server-view'
-				keyboardShouldPersistTaps='never'
-			>
-				<FormContainerInner>
-					<Text style={[styles.title, { color: themes[theme].titleText }]}>{I18n.t('Join_your_workspace')}</Text>
-					<ServerInput
-						text={text}
-						theme={theme}
-						serversHistory={serversHistory}
-						onChangeText={this.onChangeText}
-						onSubmit={this.submit}
-						onDelete={this.deleteServerHistory}
-						onPressServerHistory={this.onPressServerHistory}
-					/>
-					<Button
-						title={I18n.t('Connect')}
-						type='primary'
-						onPress={this.submit}
-						disabled={!text || connecting}
-						loading={!connectingOpen && connecting}
-						style={styles.connectButton}
-						theme={theme}
-						testID='new-server-view-button'
-					/>
-					<OrSeparator theme={theme} />
-					<Text style={[styles.description, { color: themes[theme].auxiliaryText }]}>{I18n.t('Onboarding_join_open_description')}</Text>
-					<Button
-						title={I18n.t('Join_our_open_workspace')}
-						type='secondary'
-						backgroundColor={themes[theme].chatComponentBackground}
-						onPress={this.connectOpen}
-						disabled={connecting}
-						loading={connectingOpen && connecting}
-						theme={theme}
-						testID='new-server-view-open'
-					/>
-				</FormContainerInner>
-				{this.renderCertificatePicker()}
-			</FormContainer>
+			<View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+				<Image style={styles.serverIcon} source={require('../../static/images/logo.png')} fadeDuration={0} />
+			</View>
 		);
 	}
 }

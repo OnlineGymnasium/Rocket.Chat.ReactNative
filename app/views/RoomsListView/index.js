@@ -1013,7 +1013,7 @@ class RoomsListView extends React.Component {
 						showUnread={showUnread}
 					/>
 				) : null}
-				{showServerDropdown ? <ServerDropdown navigation={navigation} /> : null}
+				{showServerDropdown ? null : null}
 			</SafeAreaView>
 		);
 	};

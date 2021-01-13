@@ -32,6 +32,8 @@ class OnboardingView extends React.Component {
 		if (!isTablet) {
 			Orientation.lockToPortrait();
 		}
+
+		this.connectServer();
 	}
 
 	componentDidMount() {
@@ -87,31 +89,7 @@ class OnboardingView extends React.Component {
 	render() {
 		const { theme } = this.props;
 		return (
-			<FormContainer theme={theme} testID='onboarding-view'>
-				<FormContainerInner>
-					<Image style={styles.onboarding} source={{ uri: 'logo' }} fadeDuration={0} />
-					<Text style={[styles.title, { color: themes[theme].titleText }]}>{I18n.t('Onboarding_title')}</Text>
-					<Text style={[styles.subtitle, { color: themes[theme].controlText }]}>{I18n.t('Onboarding_subtitle')}</Text>
-					<Text style={[styles.description, { color: themes[theme].auxiliaryText }]}>{I18n.t('Onboarding_description')}</Text>
-					<View style={styles.buttonsContainer}>
-						<Button
-							title={I18n.t('Onboarding_join_workspace')}
-							type='primary'
-							onPress={this.connectServer}
-							theme={theme}
-							testID='join-workspace'
-						/>
-						<Button
-							title={I18n.t('Create_a_new_workspace')}
-							type='secondary'
-							backgroundColor={themes[theme].chatComponentBackground}
-							onPress={this.createWorkspace}
-							theme={theme}
-							testID='create-workspace-button'
-						/>
-					</View>
-				</FormContainerInner>
-			</FormContainer>
+			<View />
 		);
 	}
 }
